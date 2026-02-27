@@ -1,14 +1,14 @@
-/* ALTER AI — Dashboard.tsx
- * Design: Ink & Signal — Editorial Dark Tech
- * Stats overview + AI Guided Prompts + recent activity
+/* ALTER AI Dashboard
+ * Premium 2025 SaaS Redesign
+ * Focus: Bot building, clean stats, AI guided prompts
+ * Design: Warm beige, purple primary, clean minimal
  */
 
 import { useState } from "react";
-import { Bot, Zap, TrendingUp, Users, MessageSquare, ArrowUpRight, Send, Sparkles } from "lucide-react";
+import { Bot, Zap, TrendingUp, Users, MessageSquare, ArrowUpRight, Send, Sparkles, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-
-const DASH_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663388082870/X5Z8LQMxBVq8wFSRdgiL23/alter-dashboard-preview-4YdNA65jtoppWKcKNHShmU.webp";
+import { Link } from "wouter";
 
 const chartData = [
   { day: "Mon", messages: 420, users: 38 },
@@ -22,9 +22,9 @@ const chartData = [
 
 const stats = [
   { label: "Active Bots", value: "12", change: "+3", up: true, icon: Bot },
-  { label: "Messages Today", value: "4,821", change: "+18%", up: true, icon: MessageSquare },
-  { label: "Monthly Revenue", value: "$3,240", change: "+12%", up: true, icon: TrendingUp },
-  { label: "Active Users", value: "847", change: "+24%", up: true, icon: Users },
+  { label: "Messages This Week", value: "5,420", change: "+18%", up: true, icon: MessageSquare },
+  { label: "Total Users", value: "847", change: "+24%", up: true, icon: Users },
+  { label: "Avg. Rating", value: "4.8", change: "+0.2", up: true, icon: TrendingUp },
 ];
 
 const recentBots = [
@@ -60,166 +60,187 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="p-6 lg:p-8 space-y-8">
-      {/* Header */}
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-foreground" style={{ fontFamily: "'Syne', sans-serif" }}>
-            Good morning, Alex
-          </h1>
-          <p className="text-muted-foreground text-sm mt-1">Here's what's happening with your bots today.</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="text-right">
-            <p className="text-xs text-muted-foreground">Plan</p>
-            <p className="text-sm font-semibold text-accent" style={{ fontFamily: "'Syne', sans-serif" }}>Pro</p>
+    <div className="min-h-screen bg-gradient-to-b from-[#F4EFE6] to-white p-6 lg:p-8">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Header */}
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Good morning, Alex
+            </h1>
+            <p className="text-gray-600 mt-2">Here's what's happening with your bots today.</p>
           </div>
-          <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm">
-            A
-          </div>
-        </div>
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((stat, i) => {
-          const Icon = stat.icon;
-          return (
-            <div key={i} className="alter-card p-5">
-              <div className="flex items-center justify-between mb-3">
-                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">{stat.label}</p>
-                <Icon className="w-4 h-4 text-muted-foreground" />
-              </div>
-              <p className="stat-number text-3xl">{stat.value}</p>
-              <div className="flex items-center gap-1 mt-2">
-                <ArrowUpRight className="w-3 h-3 text-accent" />
-                <span className="text-xs text-accent font-medium">{stat.change}</span>
-                <span className="text-xs text-muted-foreground">vs last week</span>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Chart + AI Prompt */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-        {/* Chart */}
-        <div className="alter-card p-6 lg:col-span-3">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-sm font-semibold text-foreground" style={{ fontFamily: "'Syne', sans-serif" }}>
-              Message Volume — Last 7 Days
-            </h2>
-            <span className="text-xs text-muted-foreground">Weekly</span>
-          </div>
-          <ResponsiveContainer width="100%" height={180}>
-            <AreaChart data={chartData}>
-              <defs>
-                <linearGradient id="msgGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="oklch(0.58 0.22 265)" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="oklch(0.58 0.22 265)" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <XAxis dataKey="day" tick={{ fill: "oklch(0.52 0.01 270)", fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: "oklch(0.52 0.01 270)", fontSize: 11 }} axisLine={false} tickLine={false} />
-              <Tooltip
-                contentStyle={{ background: "oklch(0.11 0.012 270)", border: "1px solid oklch(1 0 0 / 8%)", borderRadius: "8px", color: "oklch(0.92 0.008 80)" }}
-                cursor={{ stroke: "oklch(0.58 0.22 265)", strokeWidth: 1 }}
-              />
-              <Area type="monotone" dataKey="messages" stroke="oklch(0.58 0.22 265)" strokeWidth={2} fill="url(#msgGrad)" />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* AI Guided Prompts */}
-        <div className="alter-card p-6 lg:col-span-2 flex flex-col">
-          <div className="flex items-center gap-2 mb-4">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <h2 className="text-sm font-semibold text-foreground" style={{ fontFamily: "'Syne', sans-serif" }}>
-              AI Assistant
-            </h2>
-          </div>
-
-          {aiResponse ? (
-            <div className="flex-1 overflow-y-auto mb-4">
-              <div className="text-sm text-muted-foreground bg-secondary rounded-lg p-3 whitespace-pre-line leading-relaxed">
-                {aiResponse}
-              </div>
-            </div>
-          ) : (
-            <div className="flex-1 space-y-2 mb-4">
-              <p className="text-xs text-muted-foreground mb-3">Try a suggestion:</p>
-              {promptSuggestions.map((s, i) => (
-                <button
-                  key={i}
-                  onClick={() => handlePrompt(s)}
-                  className="w-full text-left text-xs text-muted-foreground bg-secondary hover:bg-secondary/80 hover:text-foreground rounded-lg px-3 py-2.5 transition-colors border border-transparent hover:border-border"
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-          )}
-
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handlePrompt()}
-              placeholder="Ask AI to help build a bot..."
-              className="flex-1 bg-input rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground border border-border focus:outline-none focus:border-primary transition-colors"
-            />
-            <Button
-              size="sm"
-              onClick={() => handlePrompt()}
-              disabled={loading}
-              className="bg-primary text-primary-foreground hover:bg-primary/90 px-3"
-            >
-              {loading ? <Zap className="w-4 h-4 animate-pulse" /> : <Send className="w-4 h-4" />}
+          <Link href="/bots">
+            <Button className="btn-primary flex items-center gap-2">
+              <Plus className="w-4 h-4" />
+              New Bot
             </Button>
-          </div>
-          {aiResponse && (
-            <button
-              onClick={() => { setAiResponse(""); setPrompt(""); }}
-              className="text-xs text-muted-foreground hover:text-foreground mt-2 text-center transition-colors"
-            >
-              Clear & start over
-            </button>
-          )}
+          </Link>
         </div>
-      </div>
 
-      {/* Recent Bots */}
-      <div className="alter-card overflow-hidden">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-border">
-          <h2 className="text-sm font-semibold text-foreground" style={{ fontFamily: "'Syne', sans-serif" }}>Recent Bots</h2>
-          <a href="/bots" className="text-xs text-primary hover:text-primary/80 transition-colors flex items-center gap-1">
-            View all <ArrowUpRight className="w-3 h-3" />
-          </a>
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          {stats.map((stat, i) => {
+            const Icon = stat.icon;
+            return (
+              <div key={i} className="card-premium p-6 space-y-3 hover:shadow-md transition-shadow">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{stat.label}</p>
+                  <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
+                    <Icon className="w-5 h-5 text-purple-600" />
+                  </div>
+                </div>
+                <p className="text-4xl font-bold text-gray-900">{stat.value}</p>
+                <div className="flex items-center gap-2">
+                  <ArrowUpRight className="w-4 h-4 text-teal-600" />
+                  <span className="text-sm font-semibold text-teal-600">{stat.change}</span>
+                  <span className="text-xs text-gray-500">vs last week</span>
+                </div>
+              </div>
+            );
+          })}
         </div>
-        <div className="divide-y divide-border">
-          {recentBots.map((bot, i) => (
-            <div key={i} className="flex items-center gap-4 px-6 py-4 hover:bg-secondary/30 transition-colors">
-              <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                <Bot className="w-4 h-4 text-primary" />
+
+        {/* Main Content Grid */}
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Left: Chart + Recent Bots */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Messages Chart */}
+            <div className="card-premium p-8 space-y-6">
+              <div>
+                <h2 className="text-xl font-bold text-gray-900">Messages This Week</h2>
+                <p className="text-gray-600 text-sm mt-1">Total conversations across all bots</p>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground">{bot.name}</p>
-                <p className="text-xs text-muted-foreground">{bot.model}</p>
-              </div>
-              <div className="text-right">
-                <p className="text-sm font-medium text-foreground">{bot.messages.toLocaleString()}</p>
-                <p className="text-xs text-muted-foreground">messages</p>
-              </div>
-              <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${
-                bot.status === "active"
-                  ? "bg-green-500/10 text-green-400"
-                  : "bg-muted text-muted-foreground"
-              }`}>
-                {bot.status}
-              </span>
+              <ResponsiveContainer width="100%" height={300}>
+                <AreaChart data={chartData}>
+                  <defs>
+                    <linearGradient id="colorMessages" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#7C3AED" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#7C3AED" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <XAxis dataKey="day" stroke="#D1D5DB" />
+                  <YAxis stroke="#D1D5DB" />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: '#FFFFFF', 
+                      border: '1px solid #E5E7EB',
+                      borderRadius: '8px'
+                    }}
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="messages" 
+                    stroke="#7C3AED" 
+                    strokeWidth={2}
+                    fillOpacity={1} 
+                    fill="url(#colorMessages)" 
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
             </div>
-          ))}
+
+            {/* Recent Bots */}
+            <div className="card-premium p-8 space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-bold text-gray-900">Your Bots</h2>
+                <Link href="/bots">
+                  <button className="text-purple-600 hover:text-purple-700 font-semibold text-sm">View All →</button>
+                </Link>
+              </div>
+              <div className="space-y-3">
+                {recentBots.map((bot, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                    <div className="flex items-center gap-4 flex-1">
+                      <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
+                        <Bot className="w-5 h-5 text-purple-600" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-semibold text-gray-900">{bot.name}</p>
+                        <p className="text-xs text-gray-500">{bot.model}</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm font-semibold text-gray-900">{bot.messages.toLocaleString()}</p>
+                      <p className={`text-xs font-medium ${bot.status === 'active' ? 'text-teal-600' : 'text-gray-500'}`}>
+                        {bot.status === 'active' ? '● Active' : '● Paused'}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Right: AI Guided Prompts */}
+          <div className="card-premium p-8 space-y-6 h-fit sticky top-24">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-purple-600" />
+              <h2 className="text-xl font-bold text-gray-900">AI Guide</h2>
+            </div>
+            <p className="text-gray-600 text-sm">
+              Tell me what kind of bot you want to build, and I'll guide you through the process.
+            </p>
+
+            {/* Prompt Input */}
+            <div className="space-y-3">
+              <div className="relative">
+                <input
+                  type="text"
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handlePrompt()}
+                  placeholder="Describe your bot idea..."
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                />
+                <button
+                  onClick={() => handlePrompt()}
+                  disabled={loading}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 text-purple-600 hover:bg-purple-100 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Suggestions */}
+              {!aiResponse && (
+                <div className="space-y-2">
+                  <p className="text-xs font-semibold text-gray-500 uppercase">Suggestions</p>
+                  {promptSuggestions.map((suggestion, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => handlePrompt(suggestion)}
+                      className="w-full text-left p-3 bg-gray-50 hover:bg-purple-50 border border-gray-200 hover:border-purple-200 rounded-lg text-sm text-gray-700 hover:text-purple-700 transition-all"
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* AI Response */}
+              {aiResponse && (
+                <div className="p-4 bg-gradient-to-br from-purple-50 to-white border border-purple-200 rounded-lg space-y-3">
+                  <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">{aiResponse}</p>
+                  <button
+                    onClick={() => { setAiResponse(""); setPrompt(""); }}
+                    className="text-xs font-semibold text-purple-600 hover:text-purple-700"
+                  >
+                    ← Ask something else
+                  </button>
+                </div>
+              )}
+
+              {loading && (
+                <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-purple-600 animate-pulse" />
+                    <p className="text-sm text-purple-700">Thinking...</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

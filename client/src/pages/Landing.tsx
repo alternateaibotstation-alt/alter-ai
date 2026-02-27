@@ -1,222 +1,372 @@
-/* ALTER AI — Landing.tsx
- * Design: Ink & Signal — Editorial Dark Tech
- * Hero with neural network background, feature grid, pricing CTA
+/* ALTER AI Landing Page
+ * Premium 2025 SaaS Redesign
+ * Focus: Bot building (not revenue)
+ * Design: Warm beige, purple primary, clean minimal
  */
 
-import { Link } from "wouter";
-import { Zap, Bot, Mic, BarChart3, ShoppingBag, Shield, ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ArrowRight, Zap, Palette, Rocket, BarChart3, Users, Sparkles, ChevronRight } from "lucide-react";
+import { Link } from "wouter";
 
-const HERO_BG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663388082870/X5Z8LQMxBVq8wFSRdgiL23/alter-hero-bg-6eYZ4oYhraCWB8V8NyzQxo.webp";
-const BOT_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663388082870/X5Z8LQMxBVq8wFSRdgiL23/alter-bot-card-gqPYG2oSAJUqk3fTw5neVp.webp";
-
-const features = [
-  { icon: Bot, title: "AI Bot Builder", desc: "Create intelligent bots with custom logic, personality, and knowledge bases in minutes." },
-  { icon: Mic, title: "Voice-Enabled Bots", desc: "Give your bots a voice. Configure TTS, STT, and real-time voice interaction flows." },
-  { icon: ShoppingBag, title: "Template Marketplace", desc: "Browse, buy, and deploy pre-built bot templates. Sell your own to earn revenue." },
-  { icon: BarChart3, title: "Revenue Analytics", desc: "Track MRR, churn, affiliate commissions, and subscription metrics in real time." },
-  { icon: Shield, title: "Role-Based Access", desc: "Free and Pro tiers with granular feature gating. Upgrade flows built in." },
-  { icon: Zap, title: "One-Click Export", desc: "Export bots as embeddable widgets, API endpoints, or standalone apps." },
-];
-
-const plans = [
-  {
-    name: "Free",
-    price: "$0",
-    period: "/month",
-    features: ["3 bots", "Basic logic engine", "Community templates", "Email support"],
-    cta: "Get Started",
-    highlight: false,
-  },
-  {
-    name: "Pro",
-    price: "$49",
-    period: "/month",
-    features: ["Unlimited bots", "Voice + media upload", "Revenue dashboard", "Affiliate manager", "Priority support", "Custom exports"],
-    cta: "Start Pro Trial",
-    highlight: true,
-  },
-  {
-    name: "Enterprise",
-    price: "Custom",
-    period: "",
-    features: ["Everything in Pro", "SSO & SAML", "Dedicated infra", "SLA guarantee", "White-label option"],
-    cta: "Contact Sales",
-    highlight: false,
-  },
-];
+const HERO_IMAGE = "https://d2xsxph8kpxj0f.cloudfront.net/310519663388082870/X5Z8LQMxBVq8wFSRdgiL23/alter-hero-bg-gqPYG2oSAJUqk3fTw5neVp.webp";
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* Nav */}
-      <header className="fixed top-0 inset-x-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <div className="min-h-screen bg-gradient-to-b from-[#F4EFE6] to-white">
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-200">
+        <div className="container flex items-center justify-between h-16">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
-              <Zap className="w-3.5 h-3.5 text-primary-foreground" />
+            <div className="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center">
+              <Zap className="w-4 h-4 text-white" />
             </div>
-            <span className="font-bold text-lg" style={{ fontFamily: "'Syne', sans-serif" }}>ALTER AI</span>
+            <span className="font-bold text-lg text-gray-900">ALTER AI</span>
           </div>
-          <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-            <a href="#features" className="hover:text-foreground transition-colors">Features</a>
-            <a href="#pricing" className="hover:text-foreground transition-colors">Pricing</a>
-            <a href="#docs" className="hover:text-foreground transition-colors">Docs</a>
+          <nav className="hidden md:flex items-center gap-8">
+            <a href="#features" className="text-gray-600 hover:text-gray-900 font-medium">Features</a>
+            <a href="#how-it-works" className="text-gray-600 hover:text-gray-900 font-medium">How It Works</a>
+            <a href="#pricing" className="text-gray-600 hover:text-gray-900 font-medium">Pricing</a>
           </nav>
           <div className="flex items-center gap-3">
+            <button className="text-gray-600 hover:text-gray-900 font-medium">Sign In</button>
             <Link href="/dashboard">
-              <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">Sign In</Button>
-            </Link>
-            <Link href="/dashboard">
-              <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
-                Get Started <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
-              </Button>
+              <Button className="btn-primary">Get Started</Button>
             </Link>
           </div>
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="relative min-h-screen flex items-center overflow-hidden pt-16">
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${HERO_BG})` }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/40" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+      {/* Hero Section */}
+      <section className="container py-20 md:py-32">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          {/* Left: Hero Text */}
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <div className="inline-block px-4 py-2 bg-purple-100 rounded-full">
+                <span className="text-sm font-semibold text-purple-600">✨ No Code Required</span>
+              </div>
+              <h1 className="hero-text">
+                Build Powerful <span className="text-highlight">AI Bots</span> — No Code Required
+              </h1>
+              <p className="section-subtitle">
+                Design, customize, and deploy intelligent AI bots for your audience with a simple visual builder. No coding skills needed.
+              </p>
+            </div>
 
-        <div className="relative max-w-7xl mx-auto px-6 py-24 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-medium mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-              Now with GPT-4o voice integration
-            </div>
-            <h1 className="text-5xl lg:text-6xl font-extrabold leading-tight mb-6 text-foreground" style={{ fontFamily: "'Syne', sans-serif" }}>
-              Build AI Bots.<br />
-              <span style={{ color: "oklch(0.58 0.22 265)" }}>Deploy Anywhere.</span><br />
-              <span style={{ color: "oklch(0.72 0.18 65)" }}>Earn Revenue.</span>
-            </h1>
-            <p className="text-lg text-muted-foreground mb-8 max-w-lg leading-relaxed">
-              ALTER AI is the complete SaaS platform for building, deploying, and monetizing intelligent AI bots — with voice, media, analytics, and a thriving template marketplace.
-            </p>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/dashboard">
-                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 px-8">
-                  Launch Dashboard <ArrowRight className="w-4 h-4 ml-2" />
+                <Button className="btn-primary w-full sm:w-auto flex items-center gap-2">
+                  Build Your First Bot <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
-              <Link href="/templates">
-                <Button size="lg" variant="outline" className="border-border text-foreground hover:bg-secondary px-8">
-                  Browse Templates
-                </Button>
-              </Link>
+              <button className="btn-secondary w-full sm:w-auto flex items-center justify-center gap-2">
+                See How It Works <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
-            <div className="flex items-center gap-6 mt-10 text-sm text-muted-foreground">
-              <span className="flex items-center gap-1.5"><Check className="w-4 h-4 text-accent" /> Free tier available</span>
-              <span className="flex items-center gap-1.5"><Check className="w-4 h-4 text-accent" /> No credit card needed</span>
-              <span className="flex items-center gap-1.5"><Check className="w-4 h-4 text-accent" /> Cancel anytime</span>
+
+            {/* Trust badges */}
+            <div className="flex flex-col sm:flex-row gap-6 pt-4">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-purple-600" />
+                <span className="text-sm text-gray-600">Free tier available</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-purple-600" />
+                <span className="text-sm text-gray-600">No credit card needed</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-purple-600" />
+                <span className="text-sm text-gray-600">Deploy in minutes</span>
+              </div>
             </div>
           </div>
 
-          <div className="hidden lg:flex justify-end">
-            <div className="relative w-80 h-80">
-              <div className="absolute inset-0 rounded-2xl" style={{ boxShadow: "0 0 80px oklch(0.58 0.22 265 / 30%)" }} />
-              <img
-                src={BOT_IMG}
-                alt="ALTER AI Bot"
-                className="w-full h-full object-cover rounded-2xl border border-primary/20"
+          {/* Right: Hero Image */}
+          <div className="relative">
+            <div className="card-premium overflow-hidden">
+              <img 
+                src={HERO_IMAGE} 
+                alt="ALTER AI Bot Builder" 
+                className="w-full h-96 object-cover"
               />
             </div>
+            {/* Floating accent */}
+            <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-gradient-to-br from-purple-200 to-transparent rounded-full blur-3xl opacity-40" />
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section id="how-it-works" className="bg-white py-20 md:py-32">
+        <div className="container">
+          <div className="text-center mb-16">
+            <h2 className="section-title mb-4">How It Works</h2>
+            <p className="section-subtitle max-w-2xl mx-auto">
+              Get your AI bot up and running in three simple steps
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                step: "1",
+                title: "Design Your Bot",
+                desc: "Choose a template or start from scratch. Define your bot's personality, knowledge base, and conversation flows.",
+                icon: Palette,
+              },
+              {
+                step: "2",
+                title: "Customize Logic",
+                desc: "Use our visual logic engine to build decision trees, set triggers, and create intelligent responses.",
+                icon: Sparkles,
+              },
+              {
+                step: "3",
+                title: "Deploy Anywhere",
+                desc: "Export your bot as an embed widget, API, standalone app, or React component. One click deployment.",
+                icon: Rocket,
+              },
+            ].map((item, idx) => {
+              const Icon = item.icon;
+              return (
+                <div key={idx} className="card-premium p-8 space-y-4">
+                  <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center">
+                    <Icon className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900">{item.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{item.desc}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* Features */}
-      <section id="features" className="py-24 max-w-7xl mx-auto px-6">
-        <div className="mb-14">
-          <p className="text-xs font-semibold uppercase tracking-widest text-primary mb-3">Platform Features</p>
-          <h2 className="text-4xl font-bold text-foreground" style={{ fontFamily: "'Syne', sans-serif" }}>
-            Everything you need to build<br />and monetize AI bots
-          </h2>
+      <section id="features" className="container py-20 md:py-32">
+        <div className="text-center mb-16">
+          <h2 className="section-title mb-4">Everything You Need</h2>
+          <p className="section-subtitle max-w-2xl mx-auto">
+            Powerful features built for creators, developers, and businesses
+          </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {features.map((f, i) => {
-            const Icon = f.icon;
+
+        <div className="grid md:grid-cols-2 gap-8">
+          {[
+            {
+              title: "Visual Bot Builder",
+              desc: "Drag-and-drop interface to create sophisticated bots without writing code.",
+              icon: Zap,
+            },
+            {
+              title: "Voice Integration",
+              desc: "Add text-to-speech and speech-to-text capabilities. Choose from 6+ professional voices.",
+              icon: Users,
+            },
+            {
+              title: "Smart Logic Engine",
+              desc: "Build complex conversation flows with triggers, conditions, actions, and dynamic responses.",
+              icon: Sparkles,
+            },
+            {
+              title: "Multi-Model Support",
+              desc: "Use GPT-4o, Claude, Gemini, or any LLM. Switch models per bot.",
+              icon: BarChart3,
+            },
+            {
+              title: "Template Marketplace",
+              desc: "Browse pre-built templates for sales, support, leads, onboarding, and more.",
+              icon: Rocket,
+            },
+            {
+              title: "One-Click Export",
+              desc: "Deploy as embed widget, REST API, standalone app, or npm package.",
+              icon: Palette,
+            },
+          ].map((feature, idx) => {
+            const Icon = feature.icon;
             return (
-              <div key={i} className="alter-card p-6 hover:border-primary/30 transition-colors group">
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                  <Icon className="w-5 h-5 text-primary" />
+              <div key={idx} className="card-premium p-8 space-y-4 hover:shadow-md transition-shadow">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-100 to-purple-50 flex items-center justify-center">
+                  <Icon className="w-6 h-6 text-purple-600" />
                 </div>
-                <h3 className="text-base font-semibold text-foreground mb-2" style={{ fontFamily: "'Syne', sans-serif" }}>{f.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
+                <h3 className="text-lg font-bold text-gray-900">{feature.title}</h3>
+                <p className="text-gray-600 leading-relaxed">{feature.desc}</p>
               </div>
             );
           })}
         </div>
       </section>
 
-      {/* Pricing */}
-      <section id="pricing" className="py-24 border-t border-border">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="mb-14 text-center">
-            <p className="text-xs font-semibold uppercase tracking-widest text-primary mb-3">Pricing</p>
-            <h2 className="text-4xl font-bold text-foreground" style={{ fontFamily: "'Syne', sans-serif" }}>
-              Simple, transparent pricing
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {plans.map((plan, i) => (
-              <div
-                key={i}
-                className={`alter-card p-8 flex flex-col relative ${plan.highlight ? "border-primary/50 indigo-glow" : ""}`}
-              >
-                {plan.highlight && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-primary text-primary-foreground text-xs font-semibold">
-                    Most Popular
-                  </div>
-                )}
-                <div className="mb-6">
-                  <p className="text-sm font-medium text-muted-foreground mb-1">{plan.name}</p>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-extrabold text-foreground" style={{ fontFamily: "'Syne', sans-serif" }}>{plan.price}</span>
-                    <span className="text-muted-foreground text-sm">{plan.period}</span>
-                  </div>
+      {/* Optional Monetization (Secondary) */}
+      <section className="bg-gray-50 py-20 md:py-32">
+        <div className="container">
+          <div className="card-premium p-12 md:p-16 space-y-8">
+            <div className="text-center space-y-4">
+              <h2 className="section-title">Monetize Your Bots (Optional)</h2>
+              <p className="section-subtitle max-w-2xl mx-auto">
+                If you want to earn revenue, ALTER AI makes it easy. Sell access to your bots, earn affiliate commissions, or build a bot marketplace.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                {
+                  title: "Subscription Plans",
+                  desc: "Set your own pricing. Manage tiers, billing, and customer access.",
+                },
+                {
+                  title: "Revenue Analytics",
+                  desc: "Track MRR, churn, customer lifetime value, and bot performance in real time.",
+                },
+                {
+                  title: "Affiliate Program",
+                  desc: "Earn 30% recurring commission on every referral. Build passive income.",
+                },
+              ].map((item, idx) => (
+                <div key={idx} className="text-center space-y-3">
+                  <h3 className="font-bold text-gray-900">{item.title}</h3>
+                  <p className="text-gray-600 text-sm">{item.desc}</p>
                 </div>
-                <ul className="space-y-3 flex-1 mb-8">
-                  {plan.features.map((feat, j) => (
-                    <li key={j} className="flex items-center gap-2.5 text-sm text-muted-foreground">
-                      <Check className="w-4 h-4 text-accent shrink-0" />
-                      {feat}
-                    </li>
-                  ))}
-                </ul>
-                <Link href="/subscription">
-                  <Button
-                    className={`w-full ${plan.highlight ? "bg-primary text-primary-foreground hover:bg-primary/90" : "bg-secondary text-foreground hover:bg-secondary/80"}`}
-                  >
-                    {plan.cta}
-                  </Button>
-                </Link>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-border py-10">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded bg-primary flex items-center justify-center">
-              <Zap className="w-3 h-3 text-primary-foreground" />
+      {/* Pricing */}
+      <section id="pricing" className="container py-20 md:py-32">
+        <div className="text-center mb-16">
+          <h2 className="section-title mb-4">Simple, Transparent Pricing</h2>
+          <p className="section-subtitle max-w-2xl mx-auto">
+            Start free. Upgrade only when you need more.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {[
+            {
+              name: "Free",
+              price: "$0",
+              desc: "Perfect for trying ALTER AI",
+              features: ["3 active bots", "Basic logic engine", "Community templates", "Email support"],
+              cta: "Get Started",
+              primary: false,
+            },
+            {
+              name: "Pro",
+              price: "$49",
+              period: "/month",
+              desc: "For serious bot builders",
+              features: ["Unlimited bots", "Voice + media upload", "Template marketplace", "Revenue dashboard", "Priority support"],
+              cta: "Start Free Trial",
+              primary: true,
+            },
+            {
+              name: "Enterprise",
+              price: "Custom",
+              desc: "For teams and organizations",
+              features: ["Everything in Pro", "SSO & SAML auth", "Dedicated support", "Custom integrations", "SLA guarantee"],
+              cta: "Contact Sales",
+              primary: false,
+            },
+          ].map((plan, idx) => (
+            <div key={idx} className={`card-premium p-8 space-y-6 ${plan.primary ? "ring-2 ring-purple-600 relative" : ""}`}>
+              {plan.primary && (
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-purple-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
+                  Most Popular
+                </div>
+              )}
+              <div>
+                <h3 className="text-xl font-bold text-gray-900">{plan.name}</h3>
+                <p className="text-gray-600 text-sm mt-1">{plan.desc}</p>
+              </div>
+              <div>
+                <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
+                {plan.period && <span className="text-gray-600">{plan.period}</span>}
+              </div>
+              <ul className="space-y-3">
+                {plan.features.map((feature, fidx) => (
+                  <li key={fidx} className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="text-purple-600 text-xs font-bold">✓</span>
+                    </div>
+                    <span className="text-gray-700">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link href="/dashboard">
+                <Button className={plan.primary ? "btn-primary w-full" : "btn-secondary w-full"}>
+                  {plan.cta}
+                </Button>
+              </Link>
             </div>
-            <span className="font-bold text-sm" style={{ fontFamily: "'Syne', sans-serif" }}>ALTER AI</span>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="bg-gradient-to-r from-purple-600 to-purple-700 py-16 md:py-24">
+        <div className="container text-center space-y-8">
+          <h2 className="text-4xl md:text-5xl font-bold text-white">
+            Ready to build your first AI bot?
+          </h2>
+          <p className="text-lg text-purple-100 max-w-2xl mx-auto">
+            Join thousands of creators building intelligent bots with ALTER AI.
+          </p>
+          <Link href="/dashboard">
+            <Button className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-3 font-semibold">
+              Build Your Bot Now
+            </Button>
+          </Link>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-gray-400 py-12">
+        <div className="container">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-6 h-6 rounded-lg bg-purple-600 flex items-center justify-center">
+                  <Zap className="w-3 h-3 text-white" />
+                </div>
+                <span className="font-bold text-white">ALTER AI</span>
+              </div>
+              <p className="text-sm">Build, customize, and deploy AI bots.</p>
+            </div>
+            <div>
+              <h4 className="font-semibold text-white mb-4">Product</h4>
+              <ul className="space-y-2 text-sm">
+                <li><a href="#" className="hover:text-white">Features</a></li>
+                <li><a href="#" className="hover:text-white">Pricing</a></li>
+                <li><a href="#" className="hover:text-white">Templates</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold text-white mb-4">Company</h4>
+              <ul className="space-y-2 text-sm">
+                <li><a href="#" className="hover:text-white">About</a></li>
+                <li><a href="#" className="hover:text-white">Blog</a></li>
+                <li><a href="#" className="hover:text-white">Contact</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold text-white mb-4">Legal</h4>
+              <ul className="space-y-2 text-sm">
+                <li><a href="#" className="hover:text-white">Privacy</a></li>
+                <li><a href="#" className="hover:text-white">Terms</a></li>
+                <li><a href="#" className="hover:text-white">Cookies</a></li>
+              </ul>
+            </div>
           </div>
-          <p className="text-xs text-muted-foreground">© 2026 ALTER AI. All rights reserved.</p>
-          <div className="flex items-center gap-6 text-xs text-muted-foreground">
-            <a href="#" className="hover:text-foreground transition-colors">Privacy</a>
-            <a href="#" className="hover:text-foreground transition-colors">Terms</a>
-            <a href="#" className="hover:text-foreground transition-colors">Contact</a>
+          <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between">
+            <p className="text-sm">&copy; 2025 ALTER AI. All rights reserved.</p>
+            <div className="flex items-center gap-6 mt-4 md:mt-0">
+              <a href="#" className="hover:text-white">Twitter</a>
+              <a href="#" className="hover:text-white">GitHub</a>
+              <a href="#" className="hover:text-white">Discord</a>
+            </div>
           </div>
         </div>
       </footer>

@@ -55,24 +55,24 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const visibleItems = navItems.filter(item => !item.pro || userRole === "pro");
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen bg-[#F4EFE6]">
       {/* Sidebar */}
       <aside
         className={cn(
-          "relative flex flex-col bg-sidebar border-r border-sidebar-border transition-all duration-250 ease-out shrink-0",
+          "relative flex flex-col bg-white border-r border-gray-200 transition-all duration-250 ease-out shrink-0",
           collapsed ? "w-16" : "w-60"
         )}
       >
         {/* Brand */}
         <div className={cn(
-          "flex items-center gap-3 px-4 py-5 border-b border-sidebar-border",
+          "flex items-center gap-3 px-4 py-5 border-b border-gray-200",
           collapsed && "justify-center px-2"
         )}>
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shrink-0">
-            <Zap className="w-4 h-4 text-primary-foreground" />
+          <div className="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center shrink-0">
+            <Zap className="w-4 h-4 text-white" />
           </div>
           {!collapsed && (
-            <span className="font-bold text-lg text-foreground" style={{ fontFamily: "'Syne', sans-serif" }}>
+            <span className="font-bold text-lg text-gray-900">
               ALTER AI
             </span>
           )}
@@ -90,20 +90,20 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               <Link key={item.href} href={item.href}>
                 <div
                   className={cn(
-                    "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-all duration-150 group",
+                    "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 group",
                     collapsed && "justify-center px-2",
                     isActive
-                      ? "text-foreground bg-sidebar-accent border-l-2 border-primary pl-[10px]"
-                      : "text-muted-foreground hover:text-foreground hover:bg-sidebar-accent"
+                      ? "text-white bg-purple-600 border-l-0 pl-3"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                   )}
                 >
                   <Icon className={cn(
                     "w-4 h-4 shrink-0 transition-colors",
-                    isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
+                    isActive ? "text-white" : "text-gray-600 group-hover:text-gray-900"
                   )} />
                   {!collapsed && <span>{item.label}</span>}
                   {!collapsed && item.pro && (
-                    <span className="ml-auto text-[10px] font-semibold px-1.5 py-0.5 rounded bg-accent/20 text-accent uppercase tracking-wide">
+                    <span className="ml-auto text-[10px] font-semibold px-1.5 py-0.5 rounded bg-purple-100 text-purple-600 uppercase tracking-wide">
                       Pro
                     </span>
                   )}
@@ -115,16 +115,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
         {/* User area */}
         {!collapsed && (
-          <div className="px-4 py-4 border-t border-sidebar-border">
+          <div className="px-4 py-4 border-t border-gray-200">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-sm font-bold">
+              <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 text-sm font-bold">
                 A
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground truncate">Alex Johnson</p>
-                <p className="text-xs text-muted-foreground truncate">Pro Plan</p>
+                <p className="text-sm font-medium text-gray-900 truncate">Alex Johnson</p>
+                <p className="text-xs text-gray-500 truncate">Pro Plan</p>
               </div>
-              <div className="w-2 h-2 rounded-full bg-accent shrink-0" />
+              <div className="w-2 h-2 rounded-full bg-teal-500 shrink-0" />
             </div>
           </div>
         )}
@@ -132,14 +132,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         {/* Collapse toggle */}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="absolute -right-3 top-6 w-6 h-6 rounded-full bg-sidebar border border-sidebar-border flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors z-10"
+          className="absolute -right-3 top-6 w-6 h-6 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-600 hover:text-gray-900 transition-colors z-10"
         >
           {collapsed ? <ChevronRight className="w-3 h-3" /> : <ChevronLeft className="w-3 h-3" />}
         </button>
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 min-w-0 overflow-auto">
+      <main className="flex-1 min-w-0 overflow-auto bg-gradient-to-b from-[#F4EFE6] to-white">
         {children}
       </main>
 
