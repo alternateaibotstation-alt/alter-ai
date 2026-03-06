@@ -2,13 +2,15 @@
  * Premium 2025 SaaS Redesign
  * Focus: Bot building, clean stats, AI guided prompts
  * Design: Warm beige, purple primary, clean minimal
+ * Data: Real Supabase integration
  */
 
-import { useState } from "react";
-import { Bot, Zap, TrendingUp, Users, MessageSquare, ArrowUpRight, Send, Sparkles, Plus } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Bot, Zap, TrendingUp, Users, MessageSquare, ArrowUpRight, Send, Sparkles, Plus, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Link } from "wouter";
+import { useDashboardData } from "@/hooks/useDashboardData";
 
 const chartData = [
   { day: "Mon", messages: 420, users: 38 },
@@ -18,20 +20,6 @@ const chartData = [
   { day: "Fri", messages: 860, users: 81 },
   { day: "Sat", messages: 640, users: 59 },
   { day: "Sun", messages: 910, users: 94 },
-];
-
-const stats = [
-  { label: "Active Bots", value: "12", change: "+3", up: true, icon: Bot },
-  { label: "Messages This Week", value: "5,420", change: "+18%", up: true, icon: MessageSquare },
-  { label: "Total Users", value: "847", change: "+24%", up: true, icon: Users },
-  { label: "Avg. Rating", value: "4.8", change: "+0.2", up: true, icon: TrendingUp },
-];
-
-const recentBots = [
-  { name: "Sales Assistant", status: "active", messages: 1240, model: "GPT-4o" },
-  { name: "Support Bot", status: "active", messages: 980, model: "GPT-4o-mini" },
-  { name: "Lead Qualifier", status: "paused", messages: 340, model: "GPT-4o" },
-  { name: "Onboarding Guide", status: "active", messages: 2100, model: "Claude 3" },
 ];
 
 const promptSuggestions = [
@@ -45,6 +33,16 @@ export default function Dashboard() {
   const [prompt, setPrompt] = useState("");
   const [aiResponse, setAiResponse] = useState("");
   const [loading, setLoading] = useState(false);
+  const [userName, setUserName] = useState("User");
+
+  // Use demo user ID for now (in production, get from auth context)
+  const demoUserId = "demo-user-123";
+  const { stats, bots, loading: dataLoading, error } = useDashboardData(demoUserId);
+
+  useEffect(() => {
+    // Simulate getting user name from auth
+    setUserName("Alex");
+  }, []);
 
   const handlePrompt = (text?: string) => {
     const query = text || prompt;
@@ -59,6 +57,13 @@ export default function Dashboard() {
     }, 1200);
   };
 
+  const statConfig = [
+    { label: "Active Bots", value: stats?.active_bots || 0, change: "+0", up: true, icon: Bot },
+    { label: "Messages This Week", value: stats?.messages_this_week || 0, change: "+0%", up: true, icon: MessageSquare },
+    { label: "Total Users", value: stats?.total_users || 0, change: "+0%", up: true, icon: Users },
+    { label: "Avg. Rating", value: stats?.avg_rating || 0, change: "+0", up: true, icon: TrendingUp },
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#F4EFE6] to-white p-6 lg:p-8">
       <div className="max-w-7xl mx-auto space-y-8">
@@ -66,7 +71,7 @@ export default function Dashboard() {
         <div className="flex items-start justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
-              Good morning, Alex
+              Good morning, {userName}
             </h1>
             <p className="text-gray-600 mt-2">Here's what's happening with your bots today.</p>
           </div>
@@ -80,7 +85,7 @@ export default function Dashboard() {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map((stat, i) => {
+          {statConfig.map((stat, i) => {
             const Icon = stat.icon;
             return (
               <div key={i} className="card-premium p-6 space-y-3 hover:shadow-md transition-shadow">
@@ -90,7 +95,13 @@ export default function Dashboard() {
                     <Icon className="w-5 h-5 text-purple-600" />
                   </div>
                 </div>
-                <p className="text-4xl font-bold text-gray-900">{stat.value}</p>
+                {dataLoading ? (
+                  <Loader2 className="w-6 h-6 text-purple-600 animate-spin" />
+                ) : (
+                  <p className="text-4xl font-bold text-gray-900">
+                    {typeof stat.value === 'number' ? stat.value.toLocaleString() : stat.value}
+                  </p>
+                )}
                 <div className="flex items-center gap-2">
                   <ArrowUpRight className="w-4 h-4 text-teal-600" />
                   <span className="text-sm font-semibold text-teal-600">{stat.change}</span>
@@ -148,27 +159,40 @@ export default function Dashboard() {
                   <button className="text-purple-600 hover:text-purple-700 font-semibold text-sm">View All →</button>
                 </Link>
               </div>
-              <div className="space-y-3">
-                {recentBots.map((bot, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
-                    <div className="flex items-center gap-4 flex-1">
-                      <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
-                        <Bot className="w-5 h-5 text-purple-600" />
+              {dataLoading ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="w-6 h-6 text-purple-600 animate-spin" />
+                </div>
+              ) : bots && bots.length > 0 ? (
+                <div className="space-y-3">
+                  {bots.map((bot: any) => (
+                    <div key={bot.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                      <div className="flex items-center gap-4 flex-1">
+                        <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
+                          <Bot className="w-5 h-5 text-purple-600" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-semibold text-gray-900">{bot.name}</p>
+                          <p className="text-xs text-gray-500">{bot.model}</p>
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <p className="font-semibold text-gray-900">{bot.name}</p>
-                        <p className="text-xs text-gray-500">{bot.model}</p>
+                      <div className="text-right">
+                        <p className="text-sm font-semibold text-gray-900">{(bot.messages_count || 0).toLocaleString()}</p>
+                        <p className={`text-xs font-medium ${bot.status === 'active' ? 'text-teal-600' : 'text-gray-500'}`}>
+                          {bot.status === 'active' ? '● Active' : '● Paused'}
+                        </p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-sm font-semibold text-gray-900">{bot.messages.toLocaleString()}</p>
-                      <p className={`text-xs font-medium ${bot.status === 'active' ? 'text-teal-600' : 'text-gray-500'}`}>
-                        {bot.status === 'active' ? '● Active' : '● Paused'}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">No bots yet. Create your first bot to get started!</p>
+                  <Link href="/bots">
+                    <Button className="btn-primary mt-4">Create Bot</Button>
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
 
