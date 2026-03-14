@@ -48,11 +48,18 @@ async function startServer() {
   });
 
   const port = process.env.PORT || 3001;
-
-  server.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}/`);
-    console.log(`API endpoints available at http://localhost:${port}/api/`);
+  console.log(`Attempting to start server on port ${port}...`);
+  console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
+  console.log(`Static path: ${staticPath}`);
+  
+  server.listen(port, "0.0.0.0", () => {
+    console.log(`Server successfully started and listening on 0.0.0.0:${port}`);
+    console.log(`API endpoints available at /api/`);
   });
+  
+  server.on('error', (error) => {
+    console.error('Server failed to start:', error);
+  });;
 }
 
 startServer().catch(console.error);
