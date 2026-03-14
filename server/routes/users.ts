@@ -7,10 +7,12 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY;
 
 if (!supabaseUrl || !supabaseServiceKey) {
-  throw new Error('Missing Supabase environment variables');
+  console.warn('Missing Supabase environment variables in users route.');
 }
 
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+const supabase = (supabaseUrl && supabaseServiceKey) 
+  ? createClient(supabaseUrl, supabaseServiceKey)
+  : { from: () => ({ select: () => ({ eq: () => ({ order: () => ({ range: () => Promise.resolve({ data: [], error: null }) }) }) }) }) } as any;
 
 // GET user profile
 router.get('/:userId', async (req, res) => {

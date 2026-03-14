@@ -3,7 +3,7 @@
  * Stripe-powered subscription management with plan comparison
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Check, Zap, CreditCard, Calendar, AlertCircle, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -67,10 +67,21 @@ const invoices = [
 ];
 
 export default function Subscription() {
+  const [userId] = useState("demo-user-123"); // In production, get from auth context
   const [currentPlan] = useState("pro");
   const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
 
-  const upgrade = (planId: string) => {
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('success')) {
+      toast.success("Subscription updated successfully!");
+    }
+    if (params.get('canceled')) {
+      toast.error("Subscription process was canceled.");
+    }
+  }, []);
+
+  const upgrade = async (planId: string) => {
     if (planId === "enterprise") {
       toast.info("Contact our sales team at sales@alterai.io");
       return;
@@ -79,7 +90,22 @@ export default function Subscription() {
       toast.info("You're already on this plan!");
       return;
     }
-    toast.success(`Upgrading to ${planId} plan... (Stripe checkout would open here)`);
+
+    try {
+      const response = await fetch('/api/stripe/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, planId }),
+      });
+      const data = await response.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error(data.error || 'Failed to create checkout session');
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to start upgrade process");
+    }
   };
 
   const cancelSubscription = () => {

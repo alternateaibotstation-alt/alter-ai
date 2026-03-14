@@ -6,9 +6,10 @@ import cors from "cors";
 import "dotenv/config";
 
 // Import API routes
-import botsRouter from "./routes/bots.js";
-import usersRouter from "./routes/users.js";
-import analyticsRouter from "./routes/analytics.js";
+import botsRouter from "./routes/bots";
+import usersRouter from "./routes/users";
+import analyticsRouter from "./routes/analytics";
+import stripeRouter from "./routes/stripe";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,6 +27,7 @@ async function startServer() {
   app.use("/api/bots", botsRouter);
   app.use("/api/users", usersRouter);
   app.use("/api/analytics", analyticsRouter);
+  app.use("/api/stripe", stripeRouter);
 
   // Health check
   app.get("/api/health", (_req, res) => {
@@ -45,7 +47,7 @@ async function startServer() {
     res.sendFile(path.join(staticPath, "index.html"));
   });
 
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 3001;
 
   server.listen(port, () => {
     console.log(`Server running on http://localhost:${port}/`);

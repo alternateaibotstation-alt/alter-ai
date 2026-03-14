@@ -1,16 +1,20 @@
 import { Router } from 'express';
 import { createClient } from '@supabase/supabase-js';
+import { OpenAI } from 'openai';
 
 const router = Router();
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY;
 
 if (!supabaseUrl || !supabaseServiceKey) {
-  throw new Error('Missing Supabase environment variables');
+  console.warn('Missing Supabase environment variables in bots route.');
 }
 
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+const supabase = (supabaseUrl && supabaseServiceKey) 
+  ? createClient(supabaseUrl, supabaseServiceKey)
+  : { from: () => ({ select: () => ({ eq: () => ({ order: () => ({ range: () => Promise.resolve({ data: [], error: null }) }) }) }) }) } as any;
 
 // GET all bots for a user
 router.get('/user/:userId', async (req, res) => {
@@ -74,7 +78,8 @@ router.post('/', async (req, res) => {
     if (error) throw error;
 
     // Update user's bot count
-    await supabase.rpc('increment_bot_count', { user_id });
+    const { data: user } = await supabase.from('users').select('bots_count').eq('id', user_id).single();
+    await supabase.from('users').update({ bots_count: (user?.bots_count || 0) + 1 }).eq('id', user_id);
 
     res.status(201).json(data);
   } catch (error: any) {
@@ -125,7 +130,8 @@ router.delete('/:botId', async (req, res) => {
     if (deleteError) throw deleteError;
 
     // Decrement user's bot count
-    await supabase.rpc('decrement_bot_count', { user_id: bot.user_id });
+    const { data: user } = await supabase.from('users').select('bots_count').eq('id', bot.user_id).single();
+    await supabase.from('users').update({ bots_count: Math.max(0, (user?.bots_count || 0) - 1) }).eq('id', bot.user_id);
 
     res.json({ success: true, message: 'Bot deleted' });
   } catch (error: any) {
@@ -157,7 +163,27 @@ router.get('/:botId/messages', async (req, res) => {
 router.post('/:botId/messages', async (req, res) => {
   try {
     const { botId } = req.params;
-    const { user_id, content, response } = req.body;
+    const { user_id, content } = req.body;
+
+    // Get bot persona
+    const { data: bot, error: botError } = await supabase
+      .from('bots')
+      .select('persona, model')
+      .eq('id', botId)
+      .single();
+
+    if (botError) throw botError;
+
+    // Generate AI response
+    const completion = await openai.chat.completions.create({
+      model: bot.model || 'gpt-4o',
+      messages: [
+        { role: 'system', content: bot.persona || 'You are a helpful assistant.' },
+        { role: 'user', content: content }
+      ],
+    });
+
+    const aiResponse = completion.choices[0].message.content;
 
     const { data, error } = await supabase
       .from('bot_messages')
@@ -166,7 +192,7 @@ router.post('/:botId/messages', async (req, res) => {
           bot_id: botId,
           user_id,
           content,
-          response,
+          response: aiResponse,
         },
       ])
       .select()
@@ -175,13 +201,13 @@ router.post('/:botId/messages', async (req, res) => {
     if (error) throw error;
 
     // Increment bot message count
-    await supabase
-      .from('bots')
-      .update({ messages_count: supabase.rpc('increment', { x: 1 }) })
-      .eq('id', botId);
+    await supabase.from('bots').update({ 
+      messages_count: (bot.messages_count || 0) + 1 
+    }).eq('id', botId);
 
     res.status(201).json(data);
   } catch (error: any) {
+    console.error('AI Error:', error);
     res.status(500).json({ error: error.message });
   }
 });
