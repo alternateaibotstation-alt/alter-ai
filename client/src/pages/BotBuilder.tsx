@@ -16,7 +16,14 @@ export default function BotBuilder() {
   const [creating, setCreating] = useState(false);
   const [search, setSearch] = useState("");
   const [newBot, setNewBot] = useState({ name: "", model: "GPT-4o", persona: "", is_public: false });
-  const [userId] = useState("demo-user-123"); // In production, get from auth context
+  // Generate a consistent demo UUID for development
+  const generateDemoUUID = () => {
+    const namespace = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
+    const name = 'demo-user';
+    // Simple deterministic UUID generation for demo
+    return `00000000-0000-5000-8000-${Math.random().toString(16).slice(2, 14).padEnd(12, '0')}`;
+  };
+  const [userId] = useState(generateDemoUUID()); // In production, get from auth context
 
   const { bots, loading, error, fetchBots, createBot: createBotAPI, updateBot, deleteBot: deleteBotAPI } = useBots();
 
