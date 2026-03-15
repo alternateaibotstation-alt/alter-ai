@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import express, { Router } from 'express';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 
