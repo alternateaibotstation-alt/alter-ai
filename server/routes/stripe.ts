@@ -1,8 +1,8 @@
-import express, { Router } from 'express';
+import express from 'express';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 
-const router = Router();
+const router = express.Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-02-24-preview' as any,
 });
