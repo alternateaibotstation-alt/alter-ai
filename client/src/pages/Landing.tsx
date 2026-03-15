@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Zap, Palette, Rocket, BarChart3, Users, Sparkles, ChevronRight } from "lucide-react";
 import { Link } from "wouter";
 
-const HERO_IMAGE = "https://d2xsxph8kpxj0f.cloudfront.net/310519663388082870/X5Z8LQMxBVq8wFSRdgiL23/alter-hero-bg-gqPYG2oSAJUqk3fTw5neVp.webp";
+const HERO_IMAGE = "/bot-builder-demo.png";
 
 export default function Landing() {
   return (
