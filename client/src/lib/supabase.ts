@@ -7,9 +7,40 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.warn('Missing Supabase environment variables. Using a dummy client.');
 }
 
-export const supabase = (supabaseUrl && supabaseAnonKey) 
-  ? createClient(supabaseUrl, supabaseAnonKey)
-  : { from: () => ({ select: () => ({ eq: () => ({ order: () => ({ range: () => Promise.resolve({ data: [], error: null }) }) }) }) }) } as any;
+const createSafeSupabaseClient = () => {
+  try {
+    if (supabaseUrl && supabaseAnonKey && !supabaseUrl.startsWith('%') && !supabaseAnonKey.startsWith('%')) {
+      return createClient(supabaseUrl, supabaseAnonKey);
+    }
+  } catch (e) {
+    console.error('Failed to initialize Supabase:', e);
+  }
+  
+  // Return a safe dummy client that won't crash the app
+  return { 
+    from: () => ({ 
+      select: () => ({ 
+        eq: () => ({ 
+          order: () => ({ 
+            range: () => Promise.resolve({ data: [], error: null }),
+            single: () => Promise.resolve({ data: null, error: null })
+          }),
+          single: () => Promise.resolve({ data: null, error: null })
+        }),
+        single: () => Promise.resolve({ data: null, error: null })
+      }),
+      insert: () => ({ select: () => ({ single: () => Promise.resolve({ data: null, error: null }) }) }),
+      update: () => ({ eq: () => Promise.resolve({ data: null, error: null }) }),
+      delete: () => ({ eq: () => Promise.resolve({ data: null, error: null }) }),
+      auth: {
+        getSession: () => Promise.resolve({ data: { session: null }, error: null }),
+        onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } })
+      }
+    }) 
+  } as any;
+};
+
+export const supabase = createSafeSupabaseClient();
 
 // Database types
 export interface Bot {
